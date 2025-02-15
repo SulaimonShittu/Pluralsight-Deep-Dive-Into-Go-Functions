@@ -15,7 +15,7 @@ func NewSemanticVersion(major, minor, patch int) SemanticVersion {
 }
 
 func (version *SemanticVersion) String() string {
-	return fmt.Sprintf("%d.%d.%d", version.minor, version.minor, version.patch)
+	return fmt.Sprintf("%d.%d.%d", version.major, version.minor, version.patch)
 }
 
 func (version *SemanticVersion) IncrementMajor() {
