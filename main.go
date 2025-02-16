@@ -49,6 +49,9 @@ func main() {
 	raiseam(&set)
 	raiseam(&set)
 
+	func() {
+		fmt.Println("This service calls itself.")
+	}()
 }
 
 // interfaces & pointer based method receivers
