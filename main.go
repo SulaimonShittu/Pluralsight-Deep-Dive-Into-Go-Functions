@@ -64,3 +64,10 @@ func (rt *RoundTripCounter) RoundTrip(r *http.Request) (*http.Response, error) {
 	rt.count += 1
 	return nil, nil
 }
+
+type User struct {
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	Phone    string `json:"phone,omitempty"`
+	Password string `json:"-"`
+}
