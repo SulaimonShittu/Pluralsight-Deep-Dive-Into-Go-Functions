@@ -31,5 +31,5 @@ func Subtract(o1, o2 float64) float64 {
 }
 
 func Multiply(o1, o2 float64) float64 {
-	return o1 - o2
+	return o1 * o2
 }

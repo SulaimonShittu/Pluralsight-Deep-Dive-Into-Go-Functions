@@ -3,9 +3,18 @@ package main
 import (
 	"Pluralsight-Deep-Dive-Into-Go-Functions/simplemath"
 	"fmt"
+	"math"
 	"math/rand"
 	"net/http"
 	"strings"
+)
+
+type MathExpr = string
+
+const (
+	AddExpr      = MathExpr("add")
+	SubtractExpr = MathExpr("subtract")
+	MultiplyExpr = MathExpr("multiply")
 )
 
 func main() {
@@ -21,6 +30,14 @@ func main() {
 	fmt.Printf("total of sum: %f\n", total)
 
 	sv := simplemath.NewSemanticVersion(23, 10, 5)
+	sv2 := &simplemath.SemanticVersion{}
+	sv2.IncrementMajor()
+	sv2.IncrementMajor()
+	sv2.IncrementMinor()
+	sv2.IncrementPatch()
+	sv2.IncrementPatch()
+	sv2.IncrementPatch()
+	fmt.Println(sv2.String())
 	sv.IncrementMajor()
 	sv.IncrementMajor()
 	sv.IncrementMajor()
@@ -47,11 +64,51 @@ func main() {
 	}
 	raiseam(&set)
 	raiseam(&set)
-	raiseam(&set)
 
-	func() {
-		fmt.Println("This service calls itself.")
-	}()
+	// returning functions from functions
+	xadder := mathExpression(AddExpr)
+	xsuber := mathExpression(SubtractExpr)
+	xmultiplier := mathExpression(MultiplyExpr)
+	fmt.Println(xadder(5.0, 3.0))
+	fmt.Println(xsuber(5.0, 3.0))
+	fmt.Println(xmultiplier(5.0, 3.0))
+
+	// passing functions as parameters
+	fmt.Printf("%f\n", double(3.0, 4.0, mathExpression(AddExpr)))
+
+	// stateful functions
+	pot := powerOfTwo()
+	fmt.Println("The Value of x square is now : ", pot())
+	fmt.Println("The Value of x square is now : ", pot())
+	fmt.Println("The Value of x square is now : ", pot())
+}
+
+// returning functions from functions
+func mathExpression(expr MathExpr) func(float64, float64) float64 {
+	switch expr {
+	case AddExpr:
+		return simplemath.Add
+	case SubtractExpr:
+		return simplemath.Subtract
+	case MultiplyExpr:
+		return simplemath.Multiply
+	default:
+		return nil
+	}
+}
+
+// passing functions as parameteters
+func double(f, f1 float64, MathExpr func(float64, float64) float64) float64 {
+	return 2 * MathExpr(f, f1)
+}
+
+// stateful functions
+func powerOfTwo() func() int64 {
+	x := 1.0
+	return func() int64 {
+		x += 1
+		return int64(math.Pow(x, 2))
+	}
 }
 
 // interfaces & pointer based method receivers
